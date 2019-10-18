@@ -5,6 +5,9 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -28,9 +31,16 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import com.ss.lms.entity.*;
+import com.ss.lms.entity.Author;
+import com.ss.lms.entity.Book;
+import com.ss.lms.entity.BookCopy;
+import com.ss.lms.entity.BookLoan;
+import com.ss.lms.entity.Borrower;
+import com.ss.lms.entity.LibraryBranch;
+import com.ss.lms.entity.Publisher;
 
 @RestController
+@EnableEurekaClient
 @SpringBootApplication
 @RequestMapping("/lms*")
 public class LmsApplication
@@ -38,15 +48,15 @@ public class LmsApplication
 	/*
 	 * Huge thanks to https://www.baeldung.com/spring-rest-template-list
 	 */
-
 	@Autowired
 	RestTemplate rt;
 
-	private final String adminUri = "http://localhost:8100/lms/admin";
-	private final String libUri = "http://localhost:8090/lms/librarian";
-	private final String borrowerUri = "http://localhost:8080/lms/borrower";
+	private final String adminUri = "http://LMSAdmin/lms/admin";
+	private final String libUri = "http://LMSLibrarian/lms/librarian";
+	private final String borrowerUri = "http://LMSBorrower/lms/borrower";
 
 	@Bean
+	@LoadBalanced
 	public RestTemplate getRestTemplate()
 	{
 		return new RestTemplate();
