@@ -53,7 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().anyRequest().hasAnyRole("ADMIN", "LIBRARIAN", "BORROWER").and().formLogin().and()
 				.logout().permitAll().logoutSuccessUrl("/login");
 		
-				//.and()
+//				.and()
 //	    .csrf().disable();
 	}
 
