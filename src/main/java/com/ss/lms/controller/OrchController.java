@@ -3,7 +3,6 @@ package com.ss.lms.controller;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,28 +35,13 @@ import com.ss.lms.entity.BookLoan;
 import com.ss.lms.entity.Borrower;
 import com.ss.lms.entity.LibraryBranch;
 import com.ss.lms.entity.Publisher;
-import com.ss.lms.entity.User;
-import com.ss.lms.service.UserService;
 
 
 @RestController
 @EnableEurekaClient
 @RequestMapping("/lms*")
-public class OrchController {
-	
-//	User user = new User("admin","password","ADMIN,LIBRARIAN,BORROWER");
-//	
-//	@Autowired
-//	UserService userService;
-//	
-//	@Bean
-//	public UserService getUserService()
-//	{
-//	//	userService.saveUser(new User("admin",new BCryptPasswordEncoder().encode("password"),"ADMIN,LIBRARIAN,BORROWER"));
-//		
-//		return new UserService();
-//	}
-	
+public class OrchController 
+{
 	/*
 	 * Huge thanks to https://www.baeldung.com/spring-rest-template-list
 	 */

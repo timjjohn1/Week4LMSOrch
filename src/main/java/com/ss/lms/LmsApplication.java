@@ -13,11 +13,12 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class LmsApplication
 {
-
+	
 	public static void main(String[] args)
 	{
 		SpringApplication.run(LmsApplication.class, args);
 	}
+	
 	@Bean
 	public ServletWebServerFactory servletContainer() {
 	    //Enabling SSL Traffic on tomcat
