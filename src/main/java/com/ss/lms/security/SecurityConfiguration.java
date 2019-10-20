@@ -35,10 +35,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     protected void configure(HttpSecurity http) throws Exception {
         //Below line will allow any authenticated user to access any resource within the system
         http.authorizeRequests()
-        	.antMatchers("/lms/admin/**").hasAnyRole("ADMIN")
-        	.antMatchers("/lms/librarian/**").hasAnyRole("LIB","ADMIN")
-        	.antMatchers("/lms/borrower/**").hasAnyRole("BORR","LIB","ADMIN")
-        	.antMatchers("/user/**").permitAll()
-        	.and().formLogin();
+    		.antMatchers("/user/**").hasRole("ADMIN")
+        	.antMatchers("/lms/admin/**").hasRole("ADMIN")
+        	.antMatchers("/lms/librarian/**").hasAnyRole("LIBRARIAN","ADMIN")
+        	.antMatchers("/lms/borrower/**").hasAnyRole("BORROWER","LIBRARIAN","ADMIN")
+        	.and().httpBasic()
+        	.and().csrf().disable();
     }
 }

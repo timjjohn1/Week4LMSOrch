@@ -39,7 +39,7 @@ import com.ss.lms.entity.Publisher;
 
 @RestController
 @EnableEurekaClient
-@RequestMapping("/lms*")
+@RequestMapping("/lms**")
 public class OrchController 
 {
 	/*
@@ -48,9 +48,9 @@ public class OrchController
 	@Autowired
 	RestTemplate rt;
 
-	private final String adminUri = "http://LMSAdmin/lms/admin";
-	private final String libUri = "http://LMSLibrarian/lms/librarian";
-	private final String borrowerUri = "http://LMSBorrower/lms/borrower";
+	public final static String adminUri = "http://LMSAdmin/lms/admin";
+	public final static String libUri = "http://LMSLibrarian/lms/librarian";
+	public final static String borrowerUri = "http://LMSBorrower/lms/borrower";
 
 	@Bean
 	@LoadBalanced

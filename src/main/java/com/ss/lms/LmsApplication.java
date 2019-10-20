@@ -25,6 +25,24 @@ public class LmsApplication
 		SpringApplication.run(LmsApplication.class, args);
 	}
 	
+	/*
+	* following method is in charge of creating a Connector which 
+	* automates the redirection from http to https
+	* any request to 8070 will get redirected to 8443
+	* */
+	private Connector httpToHttpsRedirectConnector(){
+	    Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
+	    connector.setScheme("http");
+	    connector.setPort(8070);
+	    connector.setSecure(false);
+	    connector.setRedirectPort(8443);
+	    return connector;
+	}
+	
+	/*
+	 * BEAN DEFINITIONS
+	 * */
+	
 	@Bean
 	public ServletWebServerFactory servletContainer() {
 	    //Enabling SSL Traffic on tomcat
@@ -52,26 +70,12 @@ public class LmsApplication
     }
 
 	@Autowired
-	DataSource dataSource;
+	DataSource dataSource; // for jdbcUserDetailsManager
 	
     @Bean
 	public JdbcUserDetailsManager jdbcUserDetailsManager() throws Exception {
 		JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
 		jdbcUserDetailsManager.setDataSource(dataSource);
 		return jdbcUserDetailsManager;
-	}
-	
-	/*
-	* following method is in charge of creating a Connector which 
-	* automates the redirection from http to https
-	* any request to 8070 will get redirected to 443
-	* */
-	private Connector httpToHttpsRedirectConnector(){
-	    Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
-	    connector.setScheme("http");
-	    connector.setPort(8070);
-	    connector.setSecure(false);
-	    connector.setRedirectPort(8443);
-	    return connector;
 	}
 }
