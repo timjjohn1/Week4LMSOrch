@@ -39,17 +39,18 @@ public class LmsApplication
 	    
 	    return tomcatServletWebServerFactory;
 	}
+	
 	/*
 	* following method is in charge of creating a Connector which 
 	* automates the redirection from http to https
-	* any request to 8080 will get redirected to 443
+	* any request to 8070 will get redirected to 443
 	* */
 	private Connector httpToHttpsRedirectConnector(){
 	    Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
 	    connector.setScheme("http");
 	    connector.setPort(8070);
 	    connector.setSecure(false);
-	    connector.setRedirectPort(443);
+	    connector.setRedirectPort(8443);
 	    return connector;
 	}
 }
