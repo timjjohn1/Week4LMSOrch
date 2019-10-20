@@ -46,7 +46,7 @@ public class LmsApplication
 	private Connector httpToHttpsRedirectConnector(){
 	    Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
 	    connector.setScheme("http");
-	    connector.setPort(8080);
+	    connector.setPort(8070);
 	    connector.setSecure(false);
 	    connector.setRedirectPort(443);
 	    return connector;
