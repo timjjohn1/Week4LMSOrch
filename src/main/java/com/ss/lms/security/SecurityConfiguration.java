@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
         	.antMatchers("/lms/admin/**").hasRole("ADMIN")
         	.antMatchers("/lms/librarian/**").hasAnyRole("LIBRARIAN","ADMIN")
         	.antMatchers("/lms/borrower/**").hasAnyRole("BORROWER","LIBRARIAN","ADMIN")
-        	.and().httpBasic()
+        	.and().httpBasic().and().formLogin()
         	.and().csrf().disable();
     }
 }

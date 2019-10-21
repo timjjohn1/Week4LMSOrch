@@ -24,6 +24,7 @@ public class UserController
 {
 	@Autowired
 	JdbcUserDetailsManager jdbcudm;
+	
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
@@ -49,7 +50,7 @@ public class UserController
 				authorities);
 		
 		jdbcudm.createUser(newUser);
-		return new ResponseEntity<UserDetails>(HttpStatus.CREATED);
+		return new ResponseEntity<UserDetails>(HttpStatus.NO_CONTENT);
 		
 //		Authentication authentication = new UsernamePasswordAuthenticationToken(newUser, null, user.getAuthorities());
 //		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -68,7 +69,7 @@ public class UserController
 				authorities);
 		
 		jdbcudm.createUser(newUser);
-		return new ResponseEntity<UserDetails>(HttpStatus.CREATED);
+		return new ResponseEntity<UserDetails>(HttpStatus.NO_CONTENT);
 		
 //		Authentication authentication = new UsernamePasswordAuthenticationToken(newUser, null, user.getAuthorities());
 //		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -87,7 +88,7 @@ public class UserController
 				authorities);
 		
 		jdbcudm.createUser(newUser);
-		return new ResponseEntity<UserDetails>(HttpStatus.CREATED);
+		return new ResponseEntity<UserDetails>(HttpStatus.NO_CONTENT);
 		
 //		Authentication authentication = new UsernamePasswordAuthenticationToken(newUser, null, user.getAuthorities());
 //		SecurityContextHolder.getContext().setAuthentication(authentication);
