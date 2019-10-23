@@ -41,7 +41,7 @@ public class UserController
 	public ResponseEntity<UserDetails> createAdmin(@PathVariable("userName") String userName, @PathVariable("password") String password)
 	{
 		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		authorities.add(new SimpleGrantedAuthority("ADMIN"));
 		
 		// Encode the password
 		UserDetails newUser = new User(
@@ -60,7 +60,7 @@ public class UserController
 	public ResponseEntity<UserDetails> createLibrarian(@PathVariable("userName") String userName, @PathVariable("password") String password)
 	{
 		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_LIBRARIAN"));
+		authorities.add(new SimpleGrantedAuthority("LIBRARIAN"));
 		
 		// Encode the password
 		UserDetails newUser = new User(
@@ -79,7 +79,7 @@ public class UserController
 	public ResponseEntity<UserDetails> createBorrower(@PathVariable("userName") String userName, @PathVariable("password") String password)
 	{
 		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_BORROWER"));
+		authorities.add(new SimpleGrantedAuthority("BORROWER"));
 		
 		// Encode the password
 		UserDetails newUser = new User(
