@@ -50,7 +50,7 @@ public class OrchController
 	// old borro uri: 
 	public final static String adminUri = "http://adminelb-1696634863.us-east-2.elb.amazonaws.com/lms/admin";
 	public final static String libUri = "http://lblibrarian-1671646390.us-east-2.elb.amazonaws.com/lms/librarian";
-	public final static String borrowerUri = "http://LMSBorrower/lms/borrower";
+    public final static String borrowerUri = "http://BorrowerLB-455900512.us-east-2.elb.amazonaws.com";
 
 	@GetMapping(path = "")
 	public HttpStatus isUp() 
