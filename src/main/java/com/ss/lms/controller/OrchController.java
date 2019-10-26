@@ -48,10 +48,17 @@ public class OrchController
 	@Autowired
 	RestTemplate rt;
 
-	public final static String adminUri = "http://LMSAdmin/lms/admin";
+	// old admin uri: "http://LMSAdmin/lms/admin"
+	public final static String adminUri = "http://adminelb-1696634863.us-east-2.elb.amazonaws.com/lms/admin";
 	public final static String libUri = "http://LMSLibrarian/lms/librarian";
 	public final static String borrowerUri = "http://LMSBorrower/lms/borrower";
 
+	@GetMapping(path = "")
+	public HttpStatus isUp() 
+	{
+		return HttpStatus.OK;
+	}
+	
 	@Bean
 	@LoadBalanced
 	public RestTemplate getRestTemplate()
