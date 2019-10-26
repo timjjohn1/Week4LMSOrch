@@ -63,7 +63,6 @@ public class LmsApplication
 	    
 	    return tomcatServletWebServerFactory;
 	}
-	
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
