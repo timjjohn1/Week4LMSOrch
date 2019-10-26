@@ -3,8 +3,6 @@ package com.ss.lms.controller;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -38,7 +36,6 @@ import com.ss.lms.entity.Publisher;
 
 
 @RestController
-@EnableEurekaClient
 @RequestMapping("/lms**")
 public class OrchController 
 {
@@ -62,7 +59,6 @@ public class OrchController
 	}
 	
 	@Bean
-	@LoadBalanced
 	public RestTemplate getRestTemplate()
 	{
 		return new RestTemplate();
