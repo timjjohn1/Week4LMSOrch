@@ -3,7 +3,6 @@ package com.ss.lms.controller;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
@@ -40,19 +39,28 @@ import com.ss.lms.entity.Publisher;
 
 @RestController
 @EnableEurekaClient
-@RequestMapping("/lms*")
-public class OrchController {
-	
+@RequestMapping("/lms**")
+public class OrchController 
+{
 	/*
 	 * Huge thanks to https://www.baeldung.com/spring-rest-template-list
 	 */
 	@Autowired
 	RestTemplate rt;
 
-	private final String adminUri = "http://LMSAdmin/lms/admin";
-	private final String libUri = "http://LMSLibrarian/lms/librarian";
-	private final String borrowerUri = "http://LMSBorrower/lms/borrower";
+	// old admin uri: "http://LMSAdmin/lms/admin"
+	// old admin uri: "http://LMSLibrarian/lms/librarian"
+	// old borro uri: 
+	public final static String adminUri = "http://adminelb-1696634863.us-east-2.elb.amazonaws.com/lms/admin";
+	public final static String libUri = "http://lblibrarian-1671646390.us-east-2.elb.amazonaws.com/lms/librarian";
+	public final static String borrowerUri = "http://LMSBorrower/lms/borrower";
 
+	@GetMapping(path = "")
+	public HttpStatus isUp() 
+	{
+		return HttpStatus.OK;
+	}
+	
 	@Bean
 	@LoadBalanced
 	public RestTemplate getRestTemplate()
@@ -717,79 +725,99 @@ public class OrchController {
 		}
 	}
 
-	/*************************************************
-	 * 
-	 * ALL BORROWER READ OPERATIONS
-	 * 
-	 *************************************************/
-	
-	@GetMapping(value = "/borrower/bookcopy/{branchId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-	public ResponseEntity<Iterable<BookCopy>> readAllBookCopies(@RequestHeader("Accept") String accept, @PathVariable Integer branchId)
-	{
-		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-		headers.add("Accept", accept);
-		
-		try 
-		{
-			return rt.exchange(borrowerUri + "/bookcopy/" + branchId, HttpMethod.GET, new HttpEntity<BookCopy>(headers),
-				new ParameterizedTypeReference<Iterable<BookCopy>>() { });
-		}
-		catch(HttpClientErrorException e) {
-			return new ResponseEntity<Iterable<BookCopy>>(e.getStatusCode());
-		}
-	}
-
-	@GetMapping(value = "/borrower/branch", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-	public ResponseEntity<Iterable<LibraryBranch>> readLibraryBranches(@RequestHeader("Accept") String accept)
-	{
-		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-		headers.add("Accept", accept);
-		try 
-		{
-			return rt.exchange(borrowerUri + "/branch", HttpMethod.GET, new HttpEntity<LibraryBranch>(headers),
-				new ParameterizedTypeReference<Iterable<LibraryBranch>>(){});
-		}
-		catch(HttpClientErrorException e) {
-			return new ResponseEntity<Iterable<LibraryBranch>>(e.getStatusCode());
-		}
-	}
-	
-	@GetMapping(value = "/borrower/bookloan/{cardNo}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-	public ResponseEntity<Iterable<BookLoan>> readAllBookLoan(@RequestHeader("Accept") String accept, @PathVariable Integer cardNo)
-	{
-
-		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-		headers.add("Accept", accept);
-
-		try 
-		{
-			return rt.exchange(borrowerUri + "/bookloan/" + cardNo, HttpMethod.GET, new HttpEntity<BookLoan>(headers),
-				new ParameterizedTypeReference<Iterable<BookLoan>>() { });
-		}
-		catch(HttpClientErrorException e) {
-			return new ResponseEntity<Iterable<BookLoan>>(e.getStatusCode());
-		}
-	}
-	
-	/************************************************
-	 * 												*
-	 * 			ALL BORROWER DELETE OPERATIONS		*
-	 * 												*	
-	 ************************************************/
-	
-	@DeleteMapping(value = "/borrower/bookloan/{cardNo}/branch/{branchId}/book/{bookId}")
-	public ResponseEntity<HttpStatus> deleteBookLoan(@PathVariable Integer cardNo, @PathVariable Integer branchId,
-					@PathVariable Integer bookId){
-						
-		RequestEntity<HttpStatus> request = new RequestEntity<>(HttpMethod.DELETE,
-				URI.create(borrowerUri + "/bookloan/" + cardNo + "/branch/" + branchId + "/book/" + bookId));
-
-		try 
-		{
-			return rt.exchange(request, HttpStatus.class);
-		}
-		catch(HttpClientErrorException e) {
-			return new ResponseEntity<HttpStatus>(e.getStatusCode());
-		}
-	}
+    /************************************************
+     *                                              *
+     *   BORROWER Create OPERATIONS                 *
+     *                                              *   
+     ************************************************/
+    
+    @PostMapping(value = "/borrower/bookloan", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public ResponseEntity<BookLoan> createBookloan(@RequestHeader("Accept") String accept,
+    @RequestHeader("Content-Type") String contentType, @RequestBody BookLoan bookloan) {
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Content-Type", contentType);
+        headers.add("Accept", accept);
+        
+        try {
+            return rt.exchange(borrowerUri + "/bookloan", HttpMethod.POST, new HttpEntity<BookLoan>(bookloan, headers), BookLoan.class);
+        }
+        catch(HttpClientErrorException e) {
+            return new ResponseEntity<BookLoan>(e.getStatusCode());
+        }
+    }   
+    
+    
+    /*************************************************
+     * 
+     * ALL BORROWER READ OPERATIONS
+     * 
+     *************************************************/
+    
+    @GetMapping(value = "/borrower/bookcopy/{branchId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public ResponseEntity<Iterable<BookCopy>> readAllBookCopies(@RequestHeader("Accept") String accept, @PathVariable Integer branchId)
+    {
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Accept", accept);
+        
+        try 
+        {
+            return rt.exchange(borrowerUri + "/bookcopy/" + branchId, HttpMethod.GET, new HttpEntity<BookCopy>(headers),
+                new ParameterizedTypeReference<Iterable<BookCopy>>() { });
+        }
+        catch(HttpClientErrorException e) {
+            return new ResponseEntity<Iterable<BookCopy>>(e.getStatusCode());
+        }
+    }
+    @GetMapping(value = "/borrower/branch", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public ResponseEntity<Iterable<LibraryBranch>> readLibraryBranches(@RequestHeader("Accept") String accept)
+    {
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Accept", accept);
+        try 
+        {
+            return rt.exchange(borrowerUri + "/branch", HttpMethod.GET, new HttpEntity<LibraryBranch>(headers),
+                new ParameterizedTypeReference<Iterable<LibraryBranch>>(){});
+        }
+        catch(HttpClientErrorException e) {
+            return new ResponseEntity<Iterable<LibraryBranch>>(e.getStatusCode());
+        }
+    }
+    
+    @GetMapping(value = "/borrower/bookloan/{cardNo}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public ResponseEntity<Iterable<BookLoan>> readAllBookLoan(@RequestHeader("Accept") String accept, @PathVariable Integer cardNo)
+    {
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Accept", accept);
+        try 
+        {
+            return rt.exchange(borrowerUri + "/bookloan/" + cardNo, HttpMethod.GET, new HttpEntity<BookLoan>(headers),
+                new ParameterizedTypeReference<Iterable<BookLoan>>() { });
+        }
+        catch(HttpClientErrorException e) {
+            return new ResponseEntity<Iterable<BookLoan>>(e.getStatusCode());
+        }
+    }
+    
+    
+    /************************************************
+     *                                              *
+     *          ALL BORROWER DELETE OPERATIONS      *
+     *                                              *   
+     ************************************************/
+    
+    @DeleteMapping(value = "/borrower/bookloan/{cardNo}/branch/{branchId}/bookId/{bookId}")
+    public ResponseEntity<HttpStatus> deleteBookLoan(@PathVariable Integer cardNo, @PathVariable Integer branchId,
+                    @PathVariable Integer bookId){
+                        
+        RequestEntity<HttpStatus> request = new RequestEntity<>(HttpMethod.DELETE,
+                URI.create(borrowerUri + "/bookloan/" + cardNo + "/branch/" + branchId + "/bookId/" + bookId));
+        try 
+        {
+            return rt.exchange(request, HttpStatus.class);
+        }
+        catch(HttpClientErrorException e) {
+            return new ResponseEntity<HttpStatus>(e.getStatusCode());
+        }
+    }
 }
