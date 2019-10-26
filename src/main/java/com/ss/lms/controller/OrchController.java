@@ -49,8 +49,10 @@ public class OrchController
 	RestTemplate rt;
 
 	// old admin uri: "http://LMSAdmin/lms/admin"
+	// old admin uri: "http://LMSLibrarian/lms/librarian"
+	// old borro uri: 
 	public final static String adminUri = "http://adminelb-1696634863.us-east-2.elb.amazonaws.com/lms/admin";
-	public final static String libUri = "http://LMSLibrarian/lms/librarian";
+	public final static String libUri = "http://lblibrarian-1671646390.us-east-2.elb.amazonaws.com/lms/librarian";
 	public final static String borrowerUri = "http://LMSBorrower/lms/borrower";
 
 	@GetMapping(path = "")
