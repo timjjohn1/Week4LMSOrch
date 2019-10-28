@@ -621,13 +621,12 @@ public class OrchController
 			@PathVariable Integer bookId) {
 		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 		headers.add("Accept", accept);
-		System.out.println("Checking.............................");
+
 		ResponseEntity<Book> re = null;
 		try {
 			re = rt.exchange(libUri + "/book/" + bookId, HttpMethod.GET, new HttpEntity<Book>(headers), Book.class);
 
 		}catch(HttpClientErrorException e) {
-			System.out.println(e.getStatusCode() + "|||||||||||||||||||||||||||||");
 			return new ResponseEntity<Book>(e.getStatusCode());
 			
 		}
@@ -643,9 +642,6 @@ public class OrchController
 	{
 		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 		headers.add("Accept", accept);
-		System.out.println("hhhhhhhh");
-		System.out.println(new HttpEntity<BookCopy>(headers));
-		System.out.println("jjjjjjjjjjj");
 		
 		try {
 			return rt.exchange(libUri + "/bookcopy/book/" + bookId + "/branch/" + branchId,
@@ -693,7 +689,7 @@ public class OrchController
 		MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 		headers.add("Content-Type", contentType);
 		headers.add("Accept", accept);
-		System.out.println("Helloskdljflsjdf");
+		
 		try {
 		return rt.exchange(libUri + "/bookcopy/book/" + bookId + "/branch/" + branchId, HttpMethod.PUT,
 				new HttpEntity<BookCopy>(bookCopy, headers), BookCopy.class);
